@@ -1,3 +1,8 @@
 ﻿module TwoFer
 
-let twoFer (input: string option): string = failwith "You need to implement this function."
+let twoFer (input: string option): string =
+    let name: string =
+        match input with
+        | None -> "you"
+        | Some(realName: string) -> realName
+    String.Format("One for {0}, one for me.", name)
