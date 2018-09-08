@@ -1,7 +1,7 @@
 ﻿module Bob
 
-let response (input: string): string =
-    let trimmed: string = input.Trim()
+let response (input:string):string =
+    let trimmed:string = input.Trim()
     match trimmed with
     | trimmed when trimmed.EndsWith("?") -> "Sure."
     | trimmed when trimmed.EndsWith("!") -> "Whoa, chill out!"
