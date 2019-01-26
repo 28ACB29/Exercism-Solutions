@@ -1,8 +1,10 @@
 ﻿module DiffieHellman
 
 open System
+open System.Threading
 
 let generator (maximum:int):bigint =
+    Thread.Sleep(16)
     Random().Next(maximum)
     |> bigint
 
@@ -15,7 +17,6 @@ let privateKey (primeP:bigint):bigint =
         generator quotient * bigMax + generator remainder
     | false ->
         generator (primeP |> int)
-
 
 let publicKey (primeP:bigint) (primeG:bigint) (privateKey:bigint):bigint = bigint.ModPow(primeG, privateKey, primeP)
 
