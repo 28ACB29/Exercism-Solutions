@@ -3,7 +3,7 @@
 open System
 open System.Threading
 
-let generator (maximum:int):bigint =
+let private generator (maximum:int):bigint =
     Thread.Sleep(16)
     Random().Next(maximum)
     |> bigint

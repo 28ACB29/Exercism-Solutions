@@ -1,56 +1,60 @@
 ﻿module ListOps
 
-let rec private counter (accumulator:int) (list:'a list):int =
-    match list with
-    | [] -> accumulator
-    | (head:'a)::(tail:'a list) -> counter (accumulator + 1) tail
+    let private cons (head:'a) (tail:'a list) = head::tail
 
-let rec private reverser (reversed:'a list) (list:'a list):'a list =
-    match list with
-    | [] -> reversed
-    | (head:'a)::(tail:'a list) -> reverser (head::reversed) tail
+    let rec private differenceListCreator (differenceList:'a list -> 'a list) (list:'a list):'a list -> 'a list =
+        match list with
+        | [] -> differenceList
+        | (head:'a)::(tail:'a list) -> differenceListCreator (differenceList << cons head) tail
 
-let rec private mapper (f:'a -> 'b) (list:'a list):'b list =
-    match list with
-    | [] -> []
-    | (head:'a)::(tail:'a list) -> (f head)::(mapper f tail)
+    let rec private counter (accumulator:int) (list:'a list):int =
+        match list with
+        | [] -> accumulator
+        | (head:'a)::(tail:'a list) -> counter (accumulator + 1) tail
 
-let rec private sieve (f:'a -> bool) (list:'a list):'a list =
-    match list with
-    | [] -> []
-    | (head:'a)::(tail:'a list) ->
-        match f head with
-        | true -> head::(sieve f tail)
-        | false -> sieve f tail
+    let rec private reverser (reversed:'a list) (list:'a list):'a list =
+        match list with
+        | [] -> reversed
+        | (head:'a)::(tail:'a list) -> reverser (head::reversed) tail
 
-let rec private appender (xs:'a list) (ys:'a list):'a list =
-    match xs with
-    | [] -> ys
-    | (head:'a)::(tail:'a list) -> head::(appender tail ys)
+    let rec private mapper (differenceList:'b list -> 'b list) (f:'a -> 'b) (list:'a list):'b list =
+        match list with
+        | [] -> differenceList []
+        | (head:'a)::(tail:'a list) -> mapper (differenceList << cons (f head)) f tail
 
-let rec foldl (folder:'b -> 'a -> 'b) (state:'b) (list:'a list):'b =
-    match list with
-    | [] -> state
-    | (head:'a)::(tail:'a list) -> foldl folder (folder state head) tail
+    let rec private sieve (differenceList:'a list -> 'a list) (f:'a -> bool) (list:'a list):'a list =
+        match list with
+        | [] -> differenceList []
+        | (head:'a)::(tail:'a list) ->
+            match f head with
+            | true -> sieve (differenceList << cons head) f tail
+            | false -> sieve differenceList f tail
 
-let rec foldr (folder:'a -> 'b -> 'b) (state:'b) (list:'a list):'b =
-    match list with
-    | [] -> state
-    | (head:'a)::(tail:'a list) -> folder head (foldr folder state tail)
+    let rec private appender (differenceList:'a list -> 'a list) (xs:'a list) (ys:'a list):'a list =
+        match xs with
+        | [] ->
+            []
+            |> differenceListCreator differenceList ys
+        | (head:'a)::(tail:'a list) -> appender (differenceList << cons head) tail ys
 
-let length (list:'a list):int = counter 0 list
+    let rec foldl (folder:'b -> 'a -> 'b) (state:'b) (list:'a list):'b =
+        match list with
+        | [] -> state
+        | (head:'a)::(tail:'a list) -> foldl folder (folder state head) tail
 
-let reverse (list:'a list):'a list = reverser [] list
+    let rec foldr (folder:'a -> 'b -> 'b) (state:'b) (list:'a list):'b =
+        match list with
+        | [] -> state
+        | (head:'a)::(tail:'a list) -> folder head (foldr folder state tail)
 
-let map (f:'a -> 'b) (list:'a list) = mapper f list
+    let length (list:'a list):int = counter 0 list
 
-let filter (f:'a -> bool) (list:'a list):'a list = sieve f list
+    let reverse (list:'a list):'a list = reverser [] list
 
-let append (xs:'a list) (ys:'a list):'a list = appender xs ys
+    let map (f:'a -> 'b) (list:'a list) = mapper id f list
 
-let rec private chainer (chainedList:'a list) (nestedList:'a list list):'a list =
-    match nestedList with
-    | [] -> chainedList
-    | (head:'a list)::(tail:'a list list) -> append head (chainer chainedList tail)
+    let filter (f:'a -> bool) (list:'a list):'a list = sieve id f list
 
-let concat (xs:'a list list):'a list = chainer [] xs
+    let append (xs:'a list) (ys:'a list):'a list = appender id xs ys
+
+    let concat (xs:'a list list):'a list =  foldr append [] xs

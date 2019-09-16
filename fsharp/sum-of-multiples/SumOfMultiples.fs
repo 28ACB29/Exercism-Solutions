@@ -9,7 +9,7 @@ let sum (numbers: int list) (upperBound: int): int =
             | false -> 0
         let exclusiveNumber: int = inclusiveNumber - boundary
         List.init exclusiveNumber (fun i -> (i + 1) * n)
-    number
+    numbers
     |> List.collect generateMultiples
     |> List.distinct
     |> List.sum

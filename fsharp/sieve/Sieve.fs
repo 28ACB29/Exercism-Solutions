@@ -1,12 +1,15 @@
 ﻿module Sieve
 
-let rec private sieve (numbers:int list) =
-    match numbers with
-    | [] -> []
-    | (head:int)::(tail:int list) ->
-        let filtered:int list =
+    let private cons (head:'a) (tail:'a list):'a list = head::tail
+
+    let rec private sieve (differenceList:int list -> int list) (numbers:int list) =
+        match numbers with
+        | [] ->
+            []
+            |> differenceList
+        | (head:int)::(tail:int list) ->
             tail
             |> List.filter (fun (element:int) -> element % head <> 0)
-        head::(sieve filtered)
+            |> sieve (differenceList << (cons head))
 
-let primes (limit:int):int list = sieve [2..limit]
+    let primes (limit:int):int list = sieve id [2..limit]

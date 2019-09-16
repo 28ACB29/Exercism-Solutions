@@ -1,42 +1,48 @@
 module SimpleLinkedList
 
-//TODO: define LinkedList type
-type 'a LinkedList =
-    | Nil
-    | List of 'a * 'a LinkedList
+    //TODO:define LinkedList type
+    type 'a LinkedList =
+        | Nil
+        | List of 'a * 'a LinkedList
 
-let rec tailCall (reversed: 'a LinkedList) (genericList: 'a LinkedList): 'a LinkedList =
-    match genericList with
-    | Nil -> reversed
-    | List(head: 'a, tail: 'a LinkedList) -> tailCall (List(head, reversed)) tail
+    let private cons (head:'a) (tail:'a list):'a list = head::tail
 
-let nil:'a LinkedList = Nil
+    let rec private listBuilder (differenceList:'a list -> 'a list) (genericList:'a LinkedList):'a list =
+        match genericList with
+        | Nil -> differenceList []
+        | List(head:'a, tail:'a LinkedList) -> listBuilder (differenceList << cons head) tail
 
-let create (x:'a) (n:'a LinkedList):'a LinkedList = List(x, n)
+    let rec private reverser (reversed:'a LinkedList) (genericList:'a LinkedList):'a LinkedList =
+        match genericList with
+        | Nil -> reversed
+        | List(head:'a, tail:'a LinkedList) -> reverser (List(head, reversed)) tail
 
-let isNil (x:'a LinkedList):bool =
-    match x with
-    | Nil -> true
-    | _ -> false
+    let nil:'a LinkedList = Nil
 
-let next (x:'a LinkedList):'a LinkedList =
-    match x with
-    | Nil -> Nil
-    | List(_, next:'a LinkedList) -> next
+    let create (x:'a) (n:'a LinkedList):'a LinkedList = List(x, n)
 
-let datum (x:'a LinkedList):'a =
-    match x with
-    | Nil -> failwith "Empty list"
-    | List(datum:'a, _) -> datum
+    let rec private linkedListBuilder (differenceList:'a LinkedList -> 'a LinkedList) (genericList:'a list):'a LinkedList =
+        match genericList with
+        | [] -> differenceList Nil
+        | (head:'a)::(tail:'a list) -> linkedListBuilder (differenceList << create head) tail
 
-let rec toList (x:'a LinkedList):'a list =
-    match x with
-    | Nil -> []
-    | List(datum:'a, next:'a LinkedList) -> datum::(toList next)
+    let isNil (x:'a LinkedList):bool =
+        match x with
+        | Nil -> true
+        | _ -> false
 
-let rec fromList (xs:'a list):'a LinkedList =
-    match xs with
-    | [] -> Nil
-    | (head:'a)::(tail:'a list) -> List(head, fromList tail)
+    let next (x:'a LinkedList):'a LinkedList =
+        match x with
+        | Nil -> Nil
+        | List(_, next:'a LinkedList) -> next
 
-let reverse (x:'a LinkedList):'a LinkedList = tailCall Nil x
+    let datum (x:'a LinkedList):'a =
+        match x with
+        | Nil -> failwith "Empty list"
+        | List(datum:'a, _) -> datum
+
+    let rec toList (x:'a LinkedList):'a list = listBuilder id x
+
+    let rec fromList (xs:'a list):'a LinkedList = linkedListBuilder id xs
+
+    let reverse (x:'a LinkedList):'a LinkedList = reverser Nil x

@@ -1,23 +1,27 @@
 ﻿module GradeSchool
 
-type School = Map<int, string list>
+    type Student = string
 
-let cons (head:'a) (tail:'a list) = head::tail
+    type Grade = int
 
-let empty:School =
-    [||]
-    |> Map.ofArray
+    type School = Map<int, Student list>
 
-let add (student:string) (grade:int) (school:School):School =
-    match school.TryFind grade with
-    | None -> school.Add (grade, student::[])
-    | Some(students: string list) -> school.Add (grade, students |> cons student |> List.sort)
+    let private cons (head:'a) (tail:'a list) = head::tail
 
-let roster (school:School):(int * string list) list =
-    school
-    |> Map.toList
+    let empty:School = Map.empty
 
-let grade (number:int) (school:School):string list =
-    match school.TryFind number with
-    | None -> []
-    | Some(students: string list) -> students
+    let add (student:Student) (grade:Grade) (school:School):School =
+        school
+        |> Map.tryFind grade
+        |> Option.defaultValue []
+        |> (cons student >> List.sort)
+        |> (fun (students: Student list) -> Map.add grade students school)
+
+    let roster (school:School):(Grade * Student list) list =
+        school
+        |> Map.toList
+
+    let grade (number:Grade) (school:School):Student list =
+        school
+        |> Map.tryFind number
+        |> Option.defaultValue []

@@ -1,15 +1,20 @@
 ﻿module Raindrops
 
-let private dictionary:(int * string) array = [|(3, "Pling"); (5, "Plang"); (7, "Plong")|]
+    let private dictionary:(int * string) array = [|(3, "Pling"); (5, "Plang"); (7, "Plong")|]
 
-let convert (number:int):string =
-    let appender (buffer:string) (factor:int, word:string) =
+    let private appender (number:int) (buffer:string) (factor:int, word:string) =
         match number % factor with
         | 0 -> buffer + word
         | _ -> buffer
-    let sentence:string = Array.fold appender "" dictionary
-    match sentence with
-    | "" ->
-        number
-        |> string
-    | _ -> sentence
+
+    let private sentenceCreator (number:int):string =
+        dictionary
+        |> Array.fold (appender number) ""
+
+    let convert (number:int):string =
+        let sentence:string = sentenceCreator number
+        match sentence with
+        | "" ->
+            number
+            |> string
+        | _ -> sentence

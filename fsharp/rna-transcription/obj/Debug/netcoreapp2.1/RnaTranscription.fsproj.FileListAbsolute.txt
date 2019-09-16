@@ -1,0 +1,13 @@
+C:\Users\arthu\Exercism\fsharp\rna-transcription\bin\Debug\netcoreapp2.1\xunit.runner.visualstudio.dotnetcore.testadapter.dll
+C:\Users\arthu\Exercism\fsharp\rna-transcription\bin\Debug\netcoreapp2.1\xunit.runner.reporters.netcoreapp10.dll
+C:\Users\arthu\Exercism\fsharp\rna-transcription\bin\Debug\netcoreapp2.1\xunit.runner.utility.netcoreapp10.dll
+C:\Users\arthu\Exercism\fsharp\rna-transcription\bin\Debug\netcoreapp2.1\RnaTranscription.deps.json
+C:\Users\arthu\Exercism\fsharp\rna-transcription\bin\Debug\netcoreapp2.1\RnaTranscription.runtimeconfig.json
+C:\Users\arthu\Exercism\fsharp\rna-transcription\bin\Debug\netcoreapp2.1\RnaTranscription.runtimeconfig.dev.json
+C:\Users\arthu\Exercism\fsharp\rna-transcription\bin\Debug\netcoreapp2.1\RnaTranscription.dll
+C:\Users\arthu\Exercism\fsharp\rna-transcription\bin\Debug\netcoreapp2.1\RnaTranscription.pdb
+C:\Users\arthu\Exercism\fsharp\rna-transcription\obj\Debug\netcoreapp2.1\RnaTranscription.fsprojAssemblyReference.cache
+C:\Users\arthu\Exercism\fsharp\rna-transcription\obj\Debug\netcoreapp2.1\RnaTranscription.AssemblyInfoInputs.cache
+C:\Users\arthu\Exercism\fsharp\rna-transcription\obj\Debug\netcoreapp2.1\RnaTranscription.AssemblyInfo.fs
+C:\Users\arthu\Exercism\fsharp\rna-transcription\obj\Debug\netcoreapp2.1\RnaTranscription.dll
+C:\Users\arthu\Exercism\fsharp\rna-transcription\obj\Debug\netcoreapp2.1\RnaTranscription.pdb

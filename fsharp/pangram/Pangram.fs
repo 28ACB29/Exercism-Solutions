@@ -1,12 +1,13 @@
 ﻿module Pangram
 
-open System
+    open System
 
-let private letters:char array = [|'a'..'z'|]
+    let private alphabet:char array = [|'a'..'z'|]
 
-let isPangram (input:string):bool =
-    input.ToLower().ToCharArray()
-    |> Array.distinct
-    |> Array.filter (fun (character:char) -> character |> Char.IsLetter)
-    |> Array.sort
-    |> (=) letters
+    let isPangram (input:string):bool =
+        input.ToCharArray()
+        |> Array.distinct
+        |> Array.filter (Char.IsLetter)
+        |> Array.map (Char.ToLower)
+        |> Array.sort
+        |> (=) alphabet

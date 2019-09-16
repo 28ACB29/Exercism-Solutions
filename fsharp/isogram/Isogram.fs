@@ -1,16 +1,16 @@
 ﻿module Isogram
 
-let private alphabet:char array = [|'a'..'z'|]
+    open System
 
-let isIsogram (str:string):bool =
-    let characters:char array =
-        str.ToLower().ToCharArray()
-        |> Array.filter (fun (letter:char) -> Array.contains letter alphabet)
-    let length:int =
-        characters
-        |> Array.length
-    let distinctLength:int =
-        characters
-        |> Array.distinct
-        |> Array.length
-    length = distinctLength
+    let isIsogram (str:string):bool =
+        let characters:char array =
+            str.ToLower().ToCharArray()
+            |> Array.filter (Char.IsLetter)
+        let length:int =
+            characters
+            |> Array.length
+        let distinctLength:int =
+            characters
+            |> Array.distinct
+            |> Array.length
+        length = distinctLength
