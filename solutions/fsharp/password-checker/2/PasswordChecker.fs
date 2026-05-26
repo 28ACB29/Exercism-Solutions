@@ -1,0 +1,58 @@
+module PasswordChecker
+
+open System
+
+type PasswordError =
+    | LessThan12Characters
+    | MissingUppercaseLetter
+    | MissingLowercaseLetter
+    | MissingDigit
+    | MissingSymbol
+
+let (|LessThan12Characters|_|) (s: string) =
+    match s.Length < 12 with
+    | true -> Some()
+    | false -> None
+
+let (|MissingUppercase|_|) s =
+    match s |> Seq.exists Char.IsUpper with
+    | false -> Some()
+    | true -> None
+
+let (|MissingLowercase|_|) s =
+    match s |> Seq.exists Char.IsLower with
+    | false -> Some()
+    | true -> None
+
+let (|MissingDigit|_|) s =
+    match s |> Seq.exists Char.IsDigit with
+    | false -> Some()
+    | true -> None
+
+let (|MissingSymbol|_|) s =
+    match s |> Seq.exists (fun c -> not (Char.IsLetter c) && not (Char.IsDigit c)) with
+    | false -> Some()
+    | true -> None
+
+
+/// Validate the given password against the rules defined in the instructions. If it meets all
+/// of the rules, return a result indicating success; otherwise return a result indicating
+/// failure and an error indicating which rule was violated.
+let checkPassword (password: string) : Result<string, PasswordError> =
+    match password with
+    | LessThan12Characters -> Error LessThan12Characters
+    | MissingUppercase -> Error MissingUppercaseLetter
+    | MissingLowercase -> Error MissingLowercaseLetter
+    | MissingDigit -> Error MissingDigit
+    | MissingSymbol -> Error MissingSymbol
+    | _ -> Ok password
+
+/// Return a human-readable message indicating the meaning of the given result value.
+let getStatusMessage (result: Result<string, PasswordError>) : string =
+    match result with
+    | Ok _ -> "Password is valid."
+    | Error LessThan12Characters -> "Password must be at least 12 characters long."
+    | Error MissingUppercaseLetter -> "Password must contain at least one uppercase letter."
+    | Error MissingLowercaseLetter -> "Password must contain at least one lowercase letter."
+    | Error MissingDigit -> "Password must contain at least one digit."
+    | Error MissingSymbol -> "Password must contain at least one symbol."
